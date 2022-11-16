@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 require("dotenv").config();
-const mongoUri =
-  "mongodb+srv://antons:antons@cluster0.bd0hkwu.mongodb.net/?retryWrites=true&w=majority";
+const mongoUri = process.env.mongoURI;
 const connectDB = () => {
   mongoose
     .connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
