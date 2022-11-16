@@ -1,6 +1,6 @@
+require("dotenv").config();
 const router = require("express").Router();
 const mongoose = require("mongoose");
-require("dotenv").config();
 const mongoUri = process.env.mongoURI;
 const connectDB = () => {
   mongoose
