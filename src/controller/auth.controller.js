@@ -14,17 +14,17 @@ async function login(req, res) {
     const { email, password } = req.body;
 
     // Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean();
 
     if (!user) return res.send(HttpErrorResponse("User not found"));
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       const token = await createToken(user);
-      user.token = token;
-      return res.json(HttpApiResponse(user));
+      var user_details = { ...user, token: token };
+      console.log(user_details);
+      return res.json(HttpApiResponse(user_details));
     }
-
     return res.send(HttpErrorResponse("Invalid Password"));
   } catch (err) {
     await HandleError("Auth", "login", err);
@@ -44,13 +44,14 @@ async function register(req, res) {
       email: email,
       password: hashedPassword,
     });
+    const token = await createToken(newUser);
+    var user_details = { ...newUser._doc, token: token };
+    console.log(user_details);
 
-    const token = await generateToken(newUser);
-    newUser.token = token;
-    return res.json(HttpApiResponse(newUser));
+    return res.send(HttpApiResponse(user_details));
   } catch (error) {
-    HandleError("Auth", "register", err);
-    return res.send(HttpErrorResponse(err.message));
+    await HandleError("Auth", "register", error);
+    return res.send(HttpErrorResponse(error.message));
   }
 }
 
