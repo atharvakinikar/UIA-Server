@@ -44,11 +44,11 @@ async function register(req, res) {
       email: email,
       password: hashedPassword,
     });
-    const token = await createToken(newUser);
-    var user_details = { ...newUser._doc, token: token };
-    console.log(user_details);
+    // const token = await createToken(newUser);
+    // var user_details = { ...newUser._doc, token: token };
+    // console.log(user_details);
 
-    return res.send(HttpApiResponse(user_details));
+    return res.send(HttpApiResponse("Registration successful!"));
   } catch (error) {
     await HandleError("Auth", "register", error);
     return res.send(HttpErrorResponse(error.message));
