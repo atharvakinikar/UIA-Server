@@ -23,7 +23,7 @@ async function login(req, res) {
       const token = await createToken(user);
       var user_details = { ...user, token: token };
       console.log(user_details);
-      return res.json(HttpApiResponse(user_details));
+      return res.send(HttpApiResponse(user_details));
     }
     return res.send(HttpErrorResponse("Invalid Password"));
   } catch (err) {
