@@ -1,17 +1,14 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { sign, verify } = require("jsonwebtoken");
-const Secret = "Antons";
+
 async function createToken(user) {
-  const token = await jwt.sign(
+  const token = jwt.sign(
     {
       id: user._id,
       email: user.email,
     },
-    Secret,
-    {
-      expiresIn: 6000000,
-    }
+    process.env.Secret
   );
   return token;
 }
@@ -24,7 +21,7 @@ const validateToken = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const verified = jwt.verify(token, Secret);
+    const verified = jwt.verify(token, process.env.Secret);
     return verified;
   } catch (err) {
     return res.status(401).send("Invalid Token");
