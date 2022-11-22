@@ -33,7 +33,7 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-  const { email, password, name } = req.body;
+  const { email, password, name, user_type } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) return res.send(HttpErrorResponse("User already exists"));
@@ -43,6 +43,7 @@ async function register(req, res) {
       name: name,
       email: email,
       password: hashedPassword,
+      user_type: user_type,
     });
     // const token = await createToken(newUser);
     // var user_details = { ...newUser._doc, token: token };
