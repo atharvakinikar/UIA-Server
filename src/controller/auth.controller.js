@@ -40,7 +40,7 @@ async function register(req, res) {
     console.log(doctorid);
     //process.env.Salt
     const hashedPassword = await bcrypt.hash(password, 10);
-    if (doctorid != 0) {
+    if (doctorid != null) {
       var newUser = await User.create({
         name: name,
         email: email,
