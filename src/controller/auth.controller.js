@@ -56,10 +56,6 @@ async function register(req, res) {
       });
     }
 
-    // const token = await createToken(newUser);
-    // var user_details = { ...newUser._doc, token: token };
-    // console.log(user_details);
-
     return res.send(HttpApiResponse("Registration successful!"));
   } catch (error) {
     await HandleError("Auth", "register", error);
