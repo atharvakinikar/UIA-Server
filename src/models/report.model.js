@@ -1,16 +1,34 @@
 const mongoose = require("mongoose");
+const moment = require("moment"); // require
 
 const reportSchema = new mongoose.Schema({
-  name: {
+  date: {
+    type: String,
+    default: Date.now(),
+  },
+  patient_name: {
     type: String,
     default: null,
   },
-  email: {
+  patient_email: {
     type: String,
     unique: true,
     required: true,
     trim: true,
   },
+  ref_doctor_email: {
+    type: String,
+  },
+  weight: { type: Number },
+  age: { type: Number },
+  pH: { type: Number },
+  CO2: { type: Number },
+  HCO3: { type: Number },
+  Na: { type: Number },
+  K: { type: Number },
+  Cl: { type: Number },
+  Albumin: { type: Number },
+  Lactate: { type: Number },
   disorder: {
     type: String,
   },

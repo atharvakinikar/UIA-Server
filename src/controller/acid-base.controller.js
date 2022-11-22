@@ -1,3 +1,4 @@
+const User = require("../models/user.model");
 const {
   HttpErrorResponse,
   HttpApiResponse,
@@ -6,13 +7,28 @@ const {
 } = require("../utils/utils");
 
 async function getDisorder(req, res) {
-  const { weight, age, pH, CO2, HCO3, Na, K, Cl, Albumin, Lactate } = req.body;
+  const {
+    patient_name,
+    patient_email,
+    ref_doctor_email,
+    weight,
+    age,
+    pH,
+    CO2,
+    HCO3,
+    Na,
+    K,
+    Cl,
+    Albumin,
+    Lactate,
+  } = req.body;
   //check pH and CO2 4 conditions
 
   try {
     var report;
+    var disorder = "";
     if (pH > 7.4 && CO2 > 40) {
-      const disorder = "metabolic alkalosis";
+      disorder = "metabolic alkalosis";
       const expected_PCO2 = 40 + 0.7 * Math.abs(24 - HCO3);
       const chloride_deficit = 0.2 * weight * Math.abs(100 - Cl);
       const saline_required = chloride_deficit / 154;
@@ -26,7 +42,7 @@ async function getDisorder(req, res) {
     }
     //
     else if (pH < 7.4 && CO2 < 40) {
-      var disorder = "";
+      disorder = "";
       var gap_gap_analysis;
       const expected_PCO2 = 40 - 1.2 * Math.abs(24 - HCO3);
       // const HCO3_deficit = 0.6 * weight * Math.abs(15 - HCO3);
@@ -54,7 +70,7 @@ async function getDisorder(req, res) {
     }
     //
     else if (pH > 7.4 && CO2 < 40) {
-      const disorder = "respiratory alkalosis";
+      disorder = "respiratory alkalosis";
       const expected_HCO3 = 24 - 0.4 * Math.abs(40 - CO2);
       report = {
         disorder: disorder,
@@ -64,7 +80,7 @@ async function getDisorder(req, res) {
     }
     //
     else if (pH < 7.4 && CO2 > 40) {
-      const disorder = "respiratory acidosis";
+      disorder = "respiratory acidosis";
       const expected_HCO3 = 24 + 0.4 * Math.abs(40 - CO2);
       report = {
         disorder: disorder,
@@ -82,6 +98,8 @@ async function getDisorder(req, res) {
     const other_ions_base_excess =
       base_excess -
       (Na_base_excess + Albumin_base_excess + Lactate_base_excess);
+
+    //final report to be sent to the doctor
     const final_report = {
       ...report,
       base_excess: roundoff(base_excess),
@@ -90,10 +108,36 @@ async function getDisorder(req, res) {
       Lactate_base_excess: Lactate_base_excess,
       other_ions_base_excess: roundoff(other_ions_base_excess),
     };
+
+    //saving report to mongodb
+    const save_report = new User({
+      Patient_name: patient_name,
+      patient_email: patient_email,
+      ref_doctor_email: ref_doctor_email,
+      weight: weight,
+      age: age,
+      pH: pH,
+      CO2: CO2,
+      HCO3: HCO3,
+      Na: Na,
+      K: K,
+      Cl: Cl,
+      Albumin: Albumin,
+      Lactate: Lactate,
+      disorder: disorder,
+      base_excess: base_excess,
+      Na_base_excess: Na_base_excess,
+      Albumin_base_excess: Albumin_base_excess,
+      Lactate_base_excess: Lactate_base_excess,
+      other_ions_base_excess: other_ions_base_excess,
+    });
+    const generate_report = await save_report.save();
+
+    //return
     return res.send(HttpApiResponse(final_report));
   } catch (error) {
-    await HandleError("acid-base", "getDisorder", err);
-    return res.send(HttpErrorResponse(err.message));
+    await HandleError("acid-base", "getDisorder", error);
+    return res.send(HttpErrorResponse(error.message));
   }
 }
 
