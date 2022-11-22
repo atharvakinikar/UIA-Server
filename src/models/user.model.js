@@ -18,13 +18,10 @@ const userSchema = new mongoose.Schema({
   user_type: {
     type: String,
   },
-  doctorid: {
+  doctor_id: {
     type: String,
     default: null,
   },
-  // phoneNumber: {
-  //   type: Number,
-  // },
 });
 
 const User = mongoose.model("User", userSchema);

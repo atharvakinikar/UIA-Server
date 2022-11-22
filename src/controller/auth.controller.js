@@ -33,19 +33,19 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-  const { email, password, name, user_type, doctorid } = req.body;
+  const { email, password, name, user_type, doctor_id } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) return res.send(HttpErrorResponse("User already exists"));
-    console.log(doctorid);
+    console.log(doctor_id);
     //process.env.Salt
     const hashedPassword = await bcrypt.hash(password, 10);
-    if (doctorid != null) {
+    if (doctor_id != null) {
       var newUser = await User.create({
         name: name,
         email: email,
         password: hashedPassword,
-        doctorid: doctorid,
+        doctor_id: doctor_id,
         user_type: user_type,
       });
     } else {
