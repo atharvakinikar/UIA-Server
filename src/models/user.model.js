@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   doctorid: {
-    type: Number,
+    type: String,
     default: null,
   },
   // phoneNumber: {
