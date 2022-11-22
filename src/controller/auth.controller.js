@@ -37,9 +37,10 @@ async function register(req, res) {
   try {
     const user = await User.findOne({ email });
     if (user) return res.send(HttpErrorResponse("User already exists"));
+    console.log(doctorid);
     //process.env.Salt
     const hashedPassword = await bcrypt.hash(password, 10);
-    if (doctorid) {
+    if (doctorid != 0) {
       var newUser = await User.create({
         name: name,
         email: email,
