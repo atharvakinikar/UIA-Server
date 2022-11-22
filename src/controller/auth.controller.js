@@ -45,8 +45,8 @@ async function register(req, res) {
         name: name,
         email: email,
         password: hashedPassword,
-        user_type: user_type,
         doctorid: doctorid,
+        user_type: user_type,
       });
     } else {
       var newUser = await User.create({
