@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
   user_type: {
     type: String,
   },
+  doctorid: {
+    type: Number,
+    default: null,
+  },
   // phoneNumber: {
   //   type: Number,
   // },
