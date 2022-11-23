@@ -1,3 +1,4 @@
+const Report = require("../models/report.model");
 const User = require("../models/user.model");
 const {
   HttpErrorResponse,
@@ -110,7 +111,7 @@ async function getDisorder(req, res) {
     };
 
     //saving report to mongodb
-    const save_report = new User({
+    const save_report = new Report({
       Patient_name: patient_name,
       patient_email: patient_email,
       ref_doctor_email: ref_doctor_email,
