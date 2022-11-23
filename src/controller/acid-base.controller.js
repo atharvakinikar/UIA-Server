@@ -28,7 +28,7 @@ async function getDisorder(req, res) {
   try {
     var report;
     var disorder = "";
-    if (pH > 7.4 && CO2 > 40) {
+    if (pH > 7.4 && HCO3 > 30) {
       disorder = "metabolic alkalosis";
       const expected_PCO2 = 40 + 0.7 * Math.abs(24 - HCO3);
       const chloride_deficit = 0.2 * weight * Math.abs(100 - Cl);
@@ -42,7 +42,7 @@ async function getDisorder(req, res) {
       // return res.send(HttpApiResponse(report));
     }
     //
-    else if (pH < 7.4 && CO2 < 40) {
+    else if (pH < 7.4 && HCO3 < 24) {
       disorder = "";
       var gap_gap_analysis;
       const expected_PCO2 = 40 - 1.2 * Math.abs(24 - HCO3);
@@ -112,7 +112,7 @@ async function getDisorder(req, res) {
 
     //saving report to mongodb
     const save_report = new Report({
-      Patient_name: patient_name,
+      patient_name: patient_name,
       patient_email: patient_email,
       ref_doctor_email: ref_doctor_email,
       weight: weight,
