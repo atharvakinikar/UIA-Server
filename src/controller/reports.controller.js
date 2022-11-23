@@ -20,6 +20,7 @@ async function getDoctorReports(req, res) {
   }
 }
 
+//get patients reports
 async function getPatientReports(req, res) {
   const { email } = req.body;
   try {
