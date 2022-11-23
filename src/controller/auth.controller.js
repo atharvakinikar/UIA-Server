@@ -71,7 +71,7 @@ async function register(req, res) {
     return res.send(HttpErrorResponse(error.message));
   }
 }
-
+//
 async function getProfile(req, res) {
   const { email } = req.body;
   try {
