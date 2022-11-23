@@ -47,7 +47,7 @@ async function getDisorder(req, res) {
       var gap_gap_analysis;
       const expected_PCO2 = 40 - 1.2 * Math.abs(24 - HCO3);
       // const HCO3_deficit = 0.6 * weight * Math.abs(15 - HCO3);
-      const anion_gap = Na + K - Cl - HCO3;
+      var anion_gap = Na + K - Cl - HCO3;
       if (anion_gap > 12) {
         gap_gap_analysis = (anion_gap - 12) / Math.abs(24 - HCO3);
         if (gap_gap_analysis > 1) {
@@ -63,8 +63,8 @@ async function getDisorder(req, res) {
       }
       report = {
         disorder: disorder,
-        expected_PCO2: expected_PCO2,
-        anion_gap: anion_gap,
+        expected_PCO2: roundoff(expected_PCO2),
+        anion_gap: roundoff(anion_gap),
         gap_gap_analysis: roundoff(gap_gap_analysis),
       };
       // return res.send(HttpApiResponse(report));
