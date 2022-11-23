@@ -73,13 +73,14 @@ async function register(req, res) {
 }
 
 async function getProfile(req, res) {
+  const { email } = req.body;
   try {
     // Find user without sending password and version key (__v)
-    const userId = req.user.id;
-    console.log("[Auth] Get by user-id: " + req.user.id);
-    const user = await User.findById(req.user.id).select("-password -__v");
+    // console.log("[Auth] Get by user-id: " + req.user.id);
+    const user = await User.findOne({ email: email }).lean();
+    // console.log(user);
     if (user) {
-      return res.send(HttpApiResponse(user));
+      return res.send(HttpApiResponse(user.name));
     } else {
       return res.send(HttpErrorResponse("No user exists with such id"));
     }
@@ -104,7 +105,7 @@ async function getPatients(req, res) {
       return res.send(HttpErrorResponse("No patients found!"));
     }
   } catch (error) {
-    return res.send(HttpErrorResponse(err.message));
+    return res.send(HttpErrorResponse(error.message));
   }
 }
 

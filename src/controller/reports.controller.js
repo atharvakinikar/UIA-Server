@@ -9,7 +9,7 @@ async function getDoctorReports(req, res) {
   const { email } = req.body;
   try {
     const reports = await Report.find({ ref_doctor_email: email }).lean();
-    console.log(reports);
+    // console.log(reports);
     if (reports) {
       return res.send(HttpApiResponse(reports));
     } else {
