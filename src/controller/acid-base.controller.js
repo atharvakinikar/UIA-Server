@@ -35,8 +35,8 @@ async function getDisorder(req, res) {
       const saline_required = chloride_deficit / 154;
       report = {
         disorder: disorder,
-        expected_PCO2: expected_PCO2,
-        chloride_deficit: chloride_deficit,
+        expected_PCO2: roundoff(expected_PCO2),
+        chloride_deficit: roundoff(chloride_deficit),
         saline_required: roundoff(saline_required),
       };
       // return res.send(HttpApiResponse(report));
@@ -75,7 +75,7 @@ async function getDisorder(req, res) {
       const expected_HCO3 = 24 - 0.4 * Math.abs(40 - CO2);
       report = {
         disorder: disorder,
-        expected_HCO3: expected_HCO3,
+        expected_HCO3: roundoff(expected_HCO3),
       };
       // return res.send(HttpApiResponse(report));
     }
@@ -85,7 +85,7 @@ async function getDisorder(req, res) {
       const expected_HCO3 = 24 + 0.4 * Math.abs(40 - CO2);
       report = {
         disorder: disorder,
-        expected_HCO3: expected_HCO3,
+        expected_HCO3: roundoff(expected_HCO3),
       };
       // return res.send(HttpApiResponse(report));
     }
@@ -104,9 +104,9 @@ async function getDisorder(req, res) {
     const final_report = {
       ...report,
       base_excess: roundoff(base_excess),
-      Sodium_base_excess: Na_base_excess,
-      Albumin_base_excess: Albumin_base_excess,
-      Lactate_base_excess: Lactate_base_excess,
+      Sodium_base_excess: roundoff(Na_base_excess),
+      Albumin_base_excess: roundoff(Albumin_base_excess),
+      Lactate_base_excess: roundoff(Lactate_base_excess),
       other_ions_base_excess: roundoff(other_ions_base_excess),
     };
 
