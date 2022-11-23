@@ -3,6 +3,7 @@ const { createToken, validateToken } = require("../middlewares/jwt");
 const User = require("../models/user.model");
 const Report = require("../models/report.model");
 const bcrypt = require("bcrypt");
+const mailSender = require("../utils/sendMail");
 const {
   HttpApiResponse,
   HandleError,
@@ -21,9 +22,15 @@ async function login(req, res) {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
+      const otp = Math.floor(100000 + Math.random() * 900000);
       const token = await createToken(user);
-      var user_details = { ...user, token: token };
-      console.log(user_details);
+      var user_details = { ...user, token: token, otp: otp };
+      // console.log(user_details);
+
+      const user_email = email;
+      const subject = "Otp for login on Swasthya Buddy";
+      const template = `Your OTP for logging in to Swasthya Buddy is : ${otp}. Please do not share this OTP with anyone.`;
+      mailSender(res, user_email, subject, template);
       return res.send(HttpApiResponse(user_details));
     }
     return res.send(HttpErrorResponse("Invalid Password"));
