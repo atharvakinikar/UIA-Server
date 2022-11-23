@@ -12,7 +12,6 @@ const reportSchema = new mongoose.Schema({
   },
   patient_email: {
     type: String,
-    unique: true,
     required: true,
     trim: true,
   },
