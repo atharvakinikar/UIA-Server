@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { createToken, validateToken } = require("../middlewares/jwt");
 const User = require("../models/user.model");
+const Report = require("../models/report.model");
 const bcrypt = require("bcrypt");
 const {
   HttpApiResponse,
@@ -81,4 +82,23 @@ async function getProfile(req, res) {
   }
 }
 
-module.exports = { login, register, getProfile };
+async function getPatients(req, res) {
+  const { email } = req.body;
+  try {
+    const patients = await Report.find({ ref_doctor_email: email }).lean();
+    if (patients) {
+      const emails = {};
+      const user = patients.map(patient => {
+        emails[patient.patient_email] = patient.patient_name;
+      });
+      return res.send(HttpApiResponse(emails));
+      // console.log(emails);
+    } else {
+      return res.send(HttpErrorResponse("No patients found!"));
+    }
+  } catch (error) {
+    return res.send(HttpErrorResponse(err.message));
+  }
+}
+
+module.exports = { login, register, getProfile, getPatients };
